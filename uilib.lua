@@ -15,11 +15,12 @@ screenGui.ResetOnSpawn = false
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.Parent = CoreGui
 
--- Główne okno
+-- Główne okno (z lekką przeźroczystością BackgroundTransparency)
 local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0, 520, 0, 360)
 mainFrame.Position = UDim2.new(0.5, -260, 0.5, -180)
-mainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+mainFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 14)
+mainFrame.BackgroundTransparency = 0.15 -- Przeźroczystość głównego okna
 mainFrame.BorderSizePixel = 0
 mainFrame.Active = true
 mainFrame.Draggable = true
@@ -30,14 +31,15 @@ mainCorner.CornerRadius = UDim.new(0, 8)
 mainCorner.Parent = mainFrame
 
 local mainStroke = Instance.new("UIStroke")
-mainStroke.Color = Color3.fromRGB(35, 35, 45)
+mainStroke.Color = Color3.fromRGB(180, 20, 20) -- Czerwona ramka
 mainStroke.Thickness = 1
 mainStroke.Parent = mainFrame
 
 -- Pasek górny (Titlebar)
 local topBar = Instance.new("Frame")
 topBar.Size = UDim2.new(1, 0, 0, 36)
-topBar.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
+topBar.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+topBar.BackgroundTransparency = 0.1
 topBar.BorderSizePixel = 0
 topBar.Parent = mainFrame
 
@@ -48,25 +50,35 @@ topCorner.Parent = topBar
 local topFix = Instance.new("Frame")
 topFix.Size = UDim2.new(1, 0, 0, 8)
 topFix.Position = UDim2.new(0, 0, 1, -8)
-topFix.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
+topFix.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+topFix.BackgroundTransparency = 0.1
 topFix.BorderSizePixel = 0
 topFix.Parent = topBar
 
+-- Ikona w nagłówku (Asset ID: 98291748528451)
+local iconImage = Instance.new("ImageLabel")
+iconImage.Size = UDim2.new(0, 22, 0, 22)
+iconImage.Position = UDim2.new(0, 10, 0.5, -11)
+iconImage.BackgroundTransparency = 1
+iconImage.Image = "rbxassetid://98291748528451"
+iconImage.Parent = topBar
+
+-- Tytuł główny: "N.A.S - HUB"
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(1, -50, 1, 0)
-titleLabel.Position = UDim2.new(0, 14, 0, 0)
+titleLabel.Size = UDim2.new(1, -70, 1, 0)
+titleLabel.Position = UDim2.new(0, 38, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.TextColor3 = Color3.fromRGB(230, 230, 240)
+titleLabel.TextColor3 = Color3.fromRGB(240, 240, 245)
 titleLabel.TextSize = 13
 titleLabel.Font = Enum.Font.GothamBold
-titleLabel.Text = "HUB // FRAMEWORK"
+titleLabel.Text = "N.A.S - HUB"
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.Parent = topBar
 
 local closeButton = Instance.new("TextButton")
 closeButton.Size = UDim2.new(0, 24, 0, 24)
 closeButton.Position = UDim2.new(1, -30, 0, 6)
-closeButton.BackgroundColor3 = Color3.fromRGB(28, 28, 36)
+closeButton.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
 closeButton.TextColor3 = Color3.fromRGB(160, 160, 175)
 closeButton.TextSize = 11
 closeButton.Font = Enum.Font.GothamBold
@@ -82,11 +94,11 @@ closeButton.MouseButton1Click:Connect(function()
 end)
 
 closeButton.MouseEnter:Connect(function()
-	TweenService:Create(closeButton, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(180, 40, 40), TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+	TweenService:Create(closeButton, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(200, 30, 30), TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
 end)
 
 closeButton.MouseLeave:Connect(function()
-	TweenService:Create(closeButton, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(28, 28, 36), TextColor3 = Color3.fromRGB(160, 160, 175)}):Play()
+	TweenService:Create(closeButton, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(25, 25, 32), TextColor3 = Color3.fromRGB(160, 160, 175)}):Play()
 end)
 
 -- Panel boczny (Zakładki - Tabs)
@@ -117,19 +129,17 @@ local Library = {
 	FirstTab = true
 }
 
-function Library:AddTab(name, icon)
-	icon = icon or "📁"
+function Library:AddTab(name)
 	self.TabsCount = self.TabsCount + 1
-	local tabIndex = self.TabsCount
 	
-	-- Przycisk zakładki w sidebarze
 	local tabBtn = Instance.new("TextButton")
 	tabBtn.Size = UDim2.new(1, 0, 0, 32)
-	tabBtn.BackgroundColor3 = self.FirstTab and Color3.fromRGB(25, 25, 34) or Color3.fromRGB(15, 15, 20)
-	tabBtn.TextColor3 = self.FirstTab and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(130, 130, 150)
+	tabBtn.BackgroundColor3 = self.FirstTab and Color3.fromRGB(40, 15, 15) or Color3.fromRGB(15, 15, 20)
+	tabBtn.BackgroundTransparency = 0.2
+	tabBtn.TextColor3 = self.FirstTab and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(130, 130, 150)
 	tabBtn.TextSize = 12
 	tabBtn.Font = Enum.Font.GothamMedium
-	tabBtn.Text = "  " .. icon .. "  " .. name
+	tabBtn.Text = "  " .. name
 	tabBtn.TextXAlignment = Enum.TextXAlignment.Left
 	tabBtn.AutoButtonColor = false
 	tabBtn.Parent = sidebar
@@ -138,7 +148,6 @@ function Library:AddTab(name, icon)
 	tabCorner.CornerRadius = UDim.new(0, 6)
 	tabCorner.Parent = tabBtn
 	
-	-- Kontener na elementy danej zakładki
 	local tabContent = Instance.new("ScrollingFrame")
 	tabContent.Size = UDim2.new(1, -6, 1, 0)
 	tabContent.Position = UDim2.new(0, 0, 0, 0)
@@ -147,7 +156,7 @@ function Library:AddTab(name, icon)
 	tabContent.CanvasSize = UDim2.new(0, 0, 0, 0)
 	tabContent.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	tabContent.ScrollBarThickness = 3
-	tabContent.ScrollBarImageColor3 = Color3.fromRGB(50, 50, 65)
+	tabContent.ScrollBarImageColor3 = Color3.fromRGB(120, 30, 30)
 	tabContent.Visible = self.FirstTab
 	tabContent.Parent = pagesContainer
 	
@@ -160,7 +169,6 @@ function Library:AddTab(name, icon)
 		self.FirstTab = false
 	end
 	
-	-- Obsługa kliknięcia zakładki
 	tabBtn.MouseButton1Click:Connect(function()
 		for _, child in ipairs(pagesContainer:GetChildren()) do
 			if child:IsA("ScrollingFrame") then
@@ -173,10 +181,9 @@ function Library:AddTab(name, icon)
 			end
 		end
 		tabContent.Visible = true
-		TweenService:Create(tabBtn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(25, 25, 34), TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+		TweenService:Create(tabBtn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(40, 15, 15), TextColor3 = Color3.fromRGB(255, 100, 100)}):Play()
 	end)
 	
-	-- Obiekt z metodami do dodawania kontentu wewnątrz zakładki
 	local TabElements = {}
 	
 	function TabElements:AddButton(text, callback)
@@ -185,6 +192,7 @@ function Library:AddTab(name, icon)
 		local btn = Instance.new("TextButton")
 		btn.Size = UDim2.new(1, -6, 0, 32)
 		btn.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
+		btn.BackgroundTransparency = 0.2
 		btn.TextColor3 = Color3.fromRGB(200, 200, 215)
 		btn.TextSize = 12
 		btn.Font = Enum.Font.GothamMedium
@@ -197,23 +205,23 @@ function Library:AddTab(name, icon)
 		corner.Parent = btn
 		
 		local stroke = Instance.new("UIStroke")
-		stroke.Color = Color3.fromRGB(35, 35, 45)
+		stroke.Color = Color3.fromRGB(40, 40, 50)
 		stroke.Thickness = 1
 		stroke.Parent = btn
 		
 		btn.MouseButton1Click:Connect(function()
 			task.spawn(callback)
-			TweenService:Create(btn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 40, 55)}):Play()
+			TweenService:Create(btn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(60, 20, 20)}):Play()
 			task.wait(0.1)
 			TweenService:Create(btn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(20, 20, 26)}):Play()
 		end)
 		
 		btn.MouseEnter:Connect(function()
-			TweenService:Create(stroke, TweenInfo.new(0.15), {Color = Color3.fromRGB(70, 70, 100)}):Play()
+			TweenService:Create(stroke, TweenInfo.new(0.15), {Color = Color3.fromRGB(180, 30, 30)}):Play()
 		end)
 		
 		btn.MouseLeave:Connect(function()
-			TweenService:Create(stroke, TweenInfo.new(0.15), {Color = Color3.fromRGB(35, 35, 45)}):Play()
+			TweenService:Create(stroke, TweenInfo.new(0.15), {Color = Color3.fromRGB(40, 40, 50)}):Play()
 		end)
 	end
 	
@@ -225,6 +233,7 @@ function Library:AddTab(name, icon)
 		local frame = Instance.new("TextButton")
 		frame.Size = UDim2.new(1, -6, 0, 32)
 		frame.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
+		frame.BackgroundTransparency = 0.2
 		frame.AutoButtonColor = false
 		frame.Text = ""
 		frame.Parent = tabContent
@@ -234,7 +243,7 @@ function Library:AddTab(name, icon)
 		corner.Parent = frame
 		
 		local stroke = Instance.new("UIStroke")
-		stroke.Color = Color3.fromRGB(35, 35, 45)
+		stroke.Color = Color3.fromRGB(40, 40, 50)
 		stroke.Thickness = 1
 		stroke.Parent = frame
 		
@@ -252,7 +261,7 @@ function Library:AddTab(name, icon)
 		local switchBg = Instance.new("Frame")
 		switchBg.Size = UDim2.new(0, 30, 0, 16)
 		switchBg.Position = UDim2.new(1, -38, 0.5, -8)
-		switchBg.BackgroundColor3 = state and Color3.fromRGB(0, 120, 255) or Color3.fromRGB(35, 35, 45)
+		switchBg.BackgroundColor3 = state and Color3.fromRGB(180, 20, 20) or Color3.fromRGB(40, 40, 50)
 		switchBg.BorderSizePixel = 0
 		switchBg.Parent = frame
 		
@@ -273,7 +282,7 @@ function Library:AddTab(name, icon)
 		
 		frame.MouseButton1Click:Connect(function()
 			state = not state
-			local tColor = state and Color3.fromRGB(0, 120, 255) or Color3.fromRGB(35, 35, 45)
+			local tColor = state and Color3.fromRGB(180, 20, 20) or Color3.fromRGB(40, 40, 50)
 			local tPos = state and UDim2.new(1, -14, 0.5, -6) or UDim2.new(0, 2, 0.5, -6)
 			
 			TweenService:Create(switchBg, TweenInfo.new(0.15), {BackgroundColor3 = tColor}):Play()
@@ -295,6 +304,7 @@ function Library:AddTab(name, icon)
 		local frame = Instance.new("Frame")
 		frame.Size = UDim2.new(1, -6, 0, 50)
 		frame.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
+		frame.BackgroundTransparency = 0.2
 		frame.Parent = tabContent
 		
 		local corner = Instance.new("UICorner")
@@ -302,7 +312,7 @@ function Library:AddTab(name, icon)
 		corner.Parent = frame
 		
 		local stroke = Instance.new("UIStroke")
-		stroke.Color = Color3.fromRGB(35, 35, 45)
+		stroke.Color = Color3.fromRGB(40, 40, 50)
 		stroke.Thickness = 1
 		stroke.Parent = frame
 		
@@ -321,7 +331,7 @@ function Library:AddTab(name, icon)
 		valueLabel.Size = UDim2.new(0, 40, 0, 20)
 		valueLabel.Position = UDim2.new(1, -48, 0, 6)
 		valueLabel.BackgroundTransparency = 1
-		valueLabel.TextColor3 = Color3.fromRGB(130, 130, 150)
+		valueLabel.TextColor3 = Color3.fromRGB(180, 80, 80)
 		valueLabel.TextSize = 12
 		valueLabel.Font = Enum.Font.GothamBold
 		valueLabel.TextXAlignment = Enum.TextXAlignment.Right
@@ -331,7 +341,7 @@ function Library:AddTab(name, icon)
 		local sliderBar = Instance.new("TextButton")
 		sliderBar.Size = UDim2.new(1, -20, 0, 5)
 		sliderBar.Position = UDim2.new(0, 10, 0, 32)
-		sliderBar.BackgroundColor3 = Color3.fromRGB(32, 32, 42)
+		sliderBar.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
 		sliderBar.AutoButtonColor = false
 		sliderBar.Text = ""
 		sliderBar.Parent = frame
@@ -342,7 +352,7 @@ function Library:AddTab(name, icon)
 		
 		local fill = Instance.new("Frame")
 		fill.Size = UDim2.new((value - min) / (max - min), 0, 1, 0)
-		fill.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+		fill.BackgroundColor3 = Color3.fromRGB(180, 20, 20)
 		fill.BorderSizePixel = 0
 		fill.Parent = sliderBar
 		
