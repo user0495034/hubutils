@@ -1,18 +1,15 @@
 -- ============================================================================
--- N.A.S - HUB (Windows 10 / Fluent Style & Predefined Player Variables)
+-- N.A.S - HUB (Fixed UI Library)
 -- ============================================================================
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
-local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
--- Predefined LocalPlayer Variables (Optimized for fast access)
 local player = Players.LocalPlayer
-local mouse = player:GetMouse()
-local camera = Workspace.CurrentCamera
 
+-- Predefined LocalPlayer Variables
 local function updateCharacter(char)
 	getgenv().LocalCharacter = char
 	getgenv().LocalHumanoid = char:WaitForChild("Humanoid", 5)
@@ -24,7 +21,6 @@ if player.Character then
 end
 player.CharacterAdded:Connect(updateCharacter)
 
--- Cleanup existing GUI if any
 if CoreGui:FindFirstChild("ProLibraryGUI") then
 	CoreGui.ProLibraryGUI:Destroy()
 end
@@ -84,7 +80,7 @@ iconImage.Parent = topBar
 
 -- Title
 local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(1, -100, 1, 0)
+titleLabel.Size = UDim2.new(1, -90, 1, 0)
 titleLabel.Position = UDim2.new(0, 34, 0, 0)
 titleLabel.BackgroundTransparency = 1
 titleLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
@@ -122,7 +118,7 @@ end)
 
 -- Sidebar (Tabs Navigation)
 local sidebar = Instance.new("ScrollingFrame")
-sidebar.Size = UDim2.new(0, 140, 1, -42)
+sidebar.Size = UDim2.new(0, 130, 1, -42)
 sidebar.Position = UDim2.new(0, 6, 0, 36)
 sidebar.BackgroundTransparency = 1
 sidebar.BorderSizePixel = 0
@@ -133,13 +129,13 @@ sidebar.Parent = mainFrame
 
 local sidebarLayout = Instance.new("UIListLayout")
 sidebarLayout.SortOrder = Enum.SortOrder.LayoutOrder
-sidebarLayout.Padding = UDim.new(0, 2)
+sidebarLayout.Padding = UDim.new(0, 3)
 sidebarLayout.Parent = sidebar
 
 -- Pages Container
 local pagesContainer = Instance.new("Frame")
-pagesContainer.Size = UDim2.new(1, -154, 1, -42)
-pagesContainer.Position = UDim2.new(0, 148, 0, 36)
+pagesContainer.Size = UDim2.new(1, -148, 1, -42)
+pagesContainer.Position = UDim2.new(0, 142, 0, 36)
 pagesContainer.BackgroundTransparency = 1
 pagesContainer.Parent = mainFrame
 
@@ -150,12 +146,13 @@ local Library = {
 
 function Library:AddTab(name)
 	self.TabsCount = self.TabsCount + 1
+	local currentTabIsFirst = self.FirstTab
 	
 	local tabBtn = Instance.new("TextButton")
 	tabBtn.Size = UDim2.new(1, 0, 0, 32)
-	tabBtn.BackgroundColor3 = self.FirstTab and Color3.fromRGB(50, 54, 57) or Color3.fromRGB(30, 30, 30)
-	tabBtn.BackgroundTransparency = self.FirstTab and 0.4 or 1
-	tabBtn.TextColor3 = self.FirstTab and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(180, 180, 180)
+	tabBtn.BackgroundColor3 = currentTabIsFirst and Color3.fromRGB(50, 54, 57) or Color3.fromRGB(30, 30, 30)
+	tabBtn.BackgroundTransparency = currentTabIsFirst and 0.4 or 1
+	tabBtn.TextColor3 = currentTabIsFirst and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(180, 180, 180)
 	tabBtn.TextSize = 12
 	tabBtn.Font = Enum.Font.SegoeUI
 	tabBtn.Text = "   " .. name
@@ -168,7 +165,7 @@ function Library:AddTab(name)
 	tabCorner.Parent = tabBtn
 	
 	local tabContent = Instance.new("ScrollingFrame")
-	tabContent.Size = UDim2.new(1, -6, 1, 0)
+	tabContent.Size = UDim2.new(1, -10, 1, 0)
 	tabContent.Position = UDim2.new(0, 0, 0, 0)
 	tabContent.BackgroundTransparency = 1
 	tabContent.BorderSizePixel = 0
@@ -176,7 +173,7 @@ function Library:AddTab(name)
 	tabContent.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	tabContent.ScrollBarThickness = 3
 	tabContent.ScrollBarImageColor3 = Color3.fromRGB(80, 80, 80)
-	tabContent.Visible = self.FirstTab
+	tabContent.Visible = currentTabIsFirst
 	tabContent.Parent = pagesContainer
 	
 	local contentLayout = Instance.new("UIListLayout")
@@ -353,7 +350,7 @@ function Library:AddTab(name)
 		valueLabel.BackgroundTransparency = 1
 		valueLabel.TextColor3 = Color3.fromRGB(0, 120, 212)
 		valueLabel.TextSize = 12
-		valueLabel.Font = Enum.Font.SegoeUIBold
+		valueLabel.Font = Enum.Font.LegacyFont
 		valueLabel.TextXAlignment = Enum.TextXAlignment.Right
 		valueLabel.Text = tostring(value)
 		valueLabel.Parent = frame
